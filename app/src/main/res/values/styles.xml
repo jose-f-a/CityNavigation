@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Estilos de Texto -->
+    <style name="loginLogo">
+        <item name="android:textSize">64sp</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="withoutLogin">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="inputs">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="linputs">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="lButtons">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="noteTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="noteText">
+        <item name="android:textSize">8sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="reportTitle">
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="reportText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="toolbarText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>
