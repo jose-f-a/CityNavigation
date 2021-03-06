@@ -4,6 +4,7 @@
     <!-- Menu Items -->
     <string name="miHome">Home</string>
     <string name="miNotes">Notes</string>
+    <string name="miSettings">Settings</string>
     <string name="miLogout">Logout</string>
 
     <!-- Dialog -->
