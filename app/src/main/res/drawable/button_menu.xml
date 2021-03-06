@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:padding="10dp" android:shape="rectangle">
+            <!--Cor do botão-->
+            <solid android:color="@color/white_ish" />
+            <!--Arredondamento dos cantos-->
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+</selector>
