@@ -9,14 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CityNavigation">
-        <activity android:name=".Map"></activity>
-        <activity android:name=".NoteList" />
+        <activity
+            android:name=".Map"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".NoteList"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Login"
             android:theme="@style/Theme.CityNavigation.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

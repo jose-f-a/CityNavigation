@@ -24,5 +24,6 @@ class MainActivity : AppCompatActivity() {
     fun openLogin(view: View) {
         val l = Intent(this, Login::class.java)
         startActivity(l)
+        finish()
     }
 }
