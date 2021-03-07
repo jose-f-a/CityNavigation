@@ -1,11 +1,14 @@
 package ie.cm.citynavigation.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ie.cm.citynavigation.EditNote
+import ie.cm.citynavigation.NewNote
 import ie.cm.citynavigation.R
 import ie.cm.citynavigation.entities.Note
 
@@ -18,6 +21,17 @@ class NoteCardAdapter internal constructor(
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val noteTitleView: TextView = itemView.findViewById(R.id.noteTitle)
         val noteTextView: TextView = itemView.findViewById(R.id.noteText)
+
+        init {
+            itemView.setOnClickListener{
+                v : View ->
+                val i = Intent(v.context, EditNote::class.java).apply {
+                    //putEXTRA (EXTRA_MESSAGE, message)
+                    putExtra(EXTRA_DETAILS, arrayOf(noteTitleView.text, noteTextView.text))
+                }
+                v.context.startActivity(i)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
@@ -38,4 +52,8 @@ class NoteCardAdapter internal constructor(
     }
 
     override fun getItemCount() = notes.size
+
+    companion object {
+        const val EXTRA_DETAILS = "com.example.andorid.wordlistsql.REPLY"
+    }
 }

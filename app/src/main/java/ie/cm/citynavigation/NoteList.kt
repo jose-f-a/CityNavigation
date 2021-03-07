@@ -15,8 +15,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.entities.Note
 import ie.cm.citynavigation.viewModel.NoteViewModel
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_note_list.*
 
 class NoteList : AppCompatActivity() {
 
@@ -49,7 +47,7 @@ class NoteList : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == newNoteActivityRequestCode && resultCode == Activity.RESULT_OK) {
+        if(requestCode == newNoteActivityRequestCode && resultCode == RESULT_OK) {
             data?.getStringArrayExtra(NewNote.EXTRA_REPLY)?.let {
                 val note = Note(noteTile = it[0], noteText = it[1])
                 noteViewModel.insert(note)

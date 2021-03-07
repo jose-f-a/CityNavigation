@@ -23,8 +23,8 @@ class NewNote : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.newNoteToolbar))
 
         //Inputs
-        newNoteTitleView = findViewById(R.id.newNoteTitle)
-        newNoteTextView = findViewById(R.id.newNoteText)
+        newNoteTitleView = findViewById(R.id.newNoteTitleText)
+        newNoteTextView = findViewById(R.id.newNoteTextText)
     }
     //Menu da toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

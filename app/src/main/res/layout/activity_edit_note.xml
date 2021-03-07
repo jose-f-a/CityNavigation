@@ -16,8 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/new_note_menu"
-        app:title="@string/newNote"
+        app:menu="@menu/edit_note_menu"
+        app:title="@string/editNote"
         app:titleTextAppearance="@style/toolbarText" />
 
     <com.google.android.material.textfield.TextInputLayout
