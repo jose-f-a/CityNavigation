@@ -49,11 +49,11 @@ class NoteList : AppCompatActivity() {
 
         if(requestCode == newNoteActivityRequestCode && resultCode == RESULT_OK) {
             data?.getStringArrayExtra(NewNote.EXTRA_REPLY)?.let {
-                val note = Note(noteTile = it[0], noteText = it[1])
+                val note = Note(noteTitle = it[0], noteText = it[1])
                 noteViewModel.insert(note)
             }
         } else {
-            Toast.makeText(applicationContext, R.string.lorem, Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, R.string.noteNotCreated, Toast.LENGTH_SHORT).show()
         }
     }
 }

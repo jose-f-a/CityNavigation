@@ -19,6 +19,7 @@ class NoteCardAdapter internal constructor(
     private var notes = emptyList<Note>()
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val noteIdView: TextView = itemView.findViewById(R.id.noteId)
         val noteTitleView: TextView = itemView.findViewById(R.id.noteTitle)
         val noteTextView: TextView = itemView.findViewById(R.id.noteText)
 
@@ -27,7 +28,8 @@ class NoteCardAdapter internal constructor(
                 v : View ->
                 val i = Intent(v.context, EditNote::class.java).apply {
                     //putEXTRA (EXTRA_MESSAGE, message)
-                    putExtra(EXTRA_DETAILS, arrayOf(noteTitleView.text, noteTextView.text))
+                    putExtra(noteTitle, noteTitleView.text)
+                    putExtra(noteText, noteTextView.text)
                 }
                 v.context.startActivity(i)
             }
@@ -42,7 +44,8 @@ class NoteCardAdapter internal constructor(
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val current = notes[position]
 
-        holder.noteTitleView.text = current.noteTile
+        holder.noteIdView.text = current.noteId.toString()
+        holder.noteTitleView.text = current.noteTitle
         holder.noteTextView.text = current.noteText
     }
 
@@ -55,5 +58,8 @@ class NoteCardAdapter internal constructor(
 
     companion object {
         const val EXTRA_DETAILS = "com.example.andorid.wordlistsql.REPLY"
+        const val noteId = "noteId"
+        const val noteTitle = "noteTitle"
+        const val noteText = "noteText"
     }
 }

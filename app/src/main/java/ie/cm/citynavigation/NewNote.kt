@@ -11,7 +11,6 @@ import android.view.MenuItem
 import android.widget.EditText
 
 class NewNote : AppCompatActivity() {
-
     private lateinit var newNoteTitleView: EditText
     private lateinit var newNoteTextView: EditText
 
@@ -26,6 +25,7 @@ class NewNote : AppCompatActivity() {
         newNoteTitleView = findViewById(R.id.newNoteTitleText)
         newNoteTextView = findViewById(R.id.newNoteTextText)
     }
+
     //Menu da toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
@@ -54,6 +54,7 @@ class NewNote : AppCompatActivity() {
             true
         }
         R.id.miCancel -> {
+            finish()
             true
         }
         else -> {
