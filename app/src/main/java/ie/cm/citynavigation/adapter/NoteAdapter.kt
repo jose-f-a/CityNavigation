@@ -30,6 +30,7 @@ class NoteCardAdapter internal constructor(
                     //putEXTRA (EXTRA_MESSAGE, message)
                     putExtra(noteTitle, noteTitleView.text)
                     putExtra(noteText, noteTextView.text)
+                    putExtra(noteId, noteIdView.text)
                 }
                 v.context.startActivity(i)
             }
