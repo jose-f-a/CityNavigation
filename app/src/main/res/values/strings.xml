@@ -4,7 +4,10 @@
     <!-- Menu Items -->
     <string name="miHome">Home</string>
     <string name="miNotes">Notes</string>
+    <string name="miSettings">Settings</string>
     <string name="miLogout">Logout</string>
+    <string name="miSave">Save</string>
+    <string name="miDelete">Delete</string>
 
     <!-- Dialog -->
     <string name="open">Drawer Opened</string>
@@ -14,14 +17,14 @@
     <string name="title">Title</string>
     <string name="insertText">Insert Text</string>
     <string name="newNote">New Note</string>
+    <string name="editNote">Edit Note</string>
     <string name="addNote">Add Note</string>
     <string name="addPhoto">Add Photo</string>
-    <string name="cancel">Cacnel</string>
+    <string name="cancel">Cancel</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="lorem">Lorem Ipsum</string>
     <string name="loremMail">lorem@ipsum.com</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="noteNotCreated">Note not created</string>
 </resources>

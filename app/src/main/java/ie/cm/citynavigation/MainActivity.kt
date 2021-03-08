@@ -26,4 +26,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(l)
         finish()
     }
+
+    fun openSettings(view: View) {}
 }

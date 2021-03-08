@@ -82,6 +82,28 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/button_menu"
+        android:drawableLeft="@drawable/ic_outline_settings_24"
+        android:drawableTint="@color/black_ish"
+        android:text="@string/miSettings"
+        android:onClick="openSettings"
+        android:textAlignment="textStart"
+        android:textAppearance="@style/lButtons"
+        android:textColor="@color/black_ish"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNotes"
+        tools:ignore="RtlCompat"/>
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/button_menu"
         android:drawableLeft="@drawable/ic_outline_exit_to_app_24"
         android:drawableTint="@color/black_ish"
         android:gravity="center"
@@ -94,22 +116,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnNotes"
+        app:layout_constraintTop_toBottomOf="@+id/btnSettings"
         tools:ignore="RtlCompat" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/button_menu"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSettings" />
 
 
     <ImageView
