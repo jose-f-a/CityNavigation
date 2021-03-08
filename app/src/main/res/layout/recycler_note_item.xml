@@ -42,5 +42,5 @@
         android:layout_toEndOf="@+id/noteTitle"
         android:layout_toRightOf="@+id/noteTitle"
         android:textColor="@color/black_ish"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
 </RelativeLayout>

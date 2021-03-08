@@ -12,8 +12,14 @@ class Map : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        tempbtn = findViewById(R.id.tempbtn)
+        setSupportActionBar(findViewById(R.id.homeToolbar))
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            setDisplayShowTitleEnabled(true)
+        }
 
+        tempbtn = findViewById(R.id.tempbtn)
         val reportFragment = ReportFragment()
 
         tempbtn.setOnClickListener {

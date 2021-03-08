@@ -27,5 +27,8 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    fun openSettings(view: View) {}
+    fun openSettings(view: View) {
+        val s = Intent(this, Settings::class.java)
+        startActivity(s)
+    }
 }

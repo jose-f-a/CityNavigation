@@ -20,6 +20,7 @@ class NewNote : AppCompatActivity() {
 
     //Toolbar
     setSupportActionBar(findViewById(R.id.newNoteToolbar))
+    supportActionBar?.setTitle(R.string.newNote)
 
     //Inputs
     newNoteTitleView = findViewById(R.id.newNoteTitleText)

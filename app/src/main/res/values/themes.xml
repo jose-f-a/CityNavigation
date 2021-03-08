@@ -12,6 +12,10 @@
         <item name="backgroundColor">@color/white_ish</item>
     </style>
 
+    <style name="Theme.CityNavigation.CustomToolbar">
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
     <style name="Theme.CityNavigation.NoActionBar">
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>

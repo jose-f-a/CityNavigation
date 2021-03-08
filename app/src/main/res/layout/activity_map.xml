@@ -6,13 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".Map">
 
-    <!--<androidx.appcompat.widget.Toolbar
-        android:id="@+id/myToolbar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/homeToolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/main"
+        android:theme="@style/Theme.CityNavigation.CustomToolbar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/miHome" />
 
     <Button
         android:id="@+id/tempbtn"
