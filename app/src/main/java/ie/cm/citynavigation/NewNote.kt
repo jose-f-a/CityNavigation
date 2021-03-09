@@ -36,28 +36,28 @@ class NewNote : AppCompatActivity() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-      R.id.miPicture -> {
-          true
-      }
-      R.id.miDone -> {
-          val replyIntent = Intent()
-          if (TextUtils.isEmpty(newNoteTitleView.text) || TextUtils.isEmpty(newNoteTextView.text)) {
-              setResult(Activity.RESULT_CANCELED, replyIntent)
-          } else {
-              val noteTitle = newNoteTitleView.text.toString()
-              val noteText = newNoteTextView.text.toString()
+    R.id.miPicture -> {
+      true
+    }
+    R.id.miDone -> {
+      val replyIntent = Intent()
+      if (TextUtils.isEmpty(newNoteTitleView.text) || TextUtils.isEmpty(newNoteTextView.text)) {
+        setResult(Activity.RESULT_CANCELED, replyIntent)
+      } else {
+        val noteTitle = newNoteTitleView.text.toString()
+        val noteText = newNoteTextView.text.toString()
 
-              replyIntent.putExtra(EXTRA_REPLY, arrayOf(noteTitle, noteText))
+        replyIntent.putExtra(EXTRA_REPLY, arrayOf(noteTitle, noteText))
 
-              setResult(Activity.RESULT_OK, replyIntent)
-          }
-          finish()
-          true
+        setResult(Activity.RESULT_OK, replyIntent)
       }
-      R.id.miCancel -> {
-          finish()
-          true
-      }
+      finish()
+      true
+    }
+    R.id.miCancel -> {
+      finish()
+      true
+    }
     else -> {
       super.onOptionsItemSelected(item)
     }

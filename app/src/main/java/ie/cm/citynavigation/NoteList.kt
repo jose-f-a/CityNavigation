@@ -1,14 +1,9 @@
 package ie.cm.citynavigation
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,49 +14,49 @@ import ie.cm.citynavigation.viewModel.NoteViewModel
 
 class NoteList : AppCompatActivity() {
 
-    private lateinit var noteViewModel: NoteViewModel
-    private val newNoteActivityRequestCode = 1
+  private lateinit var noteViewModel: NoteViewModel
+  private val newNoteActivityRequestCode = 1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_note_list)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_note_list)
 
-        setSupportActionBar(findViewById(R.id.noteListToolbar))
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-            setDisplayShowTitleEnabled(true)
-        }
-
-        //Recycler view
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerNotes)
-        val adapter = NoteCardAdapter(this)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        //View model
-        noteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
-        noteViewModel.allNotes.observe(this, { notes ->
-            notes?.let{adapter.setNotes(it)}
-        })
-
-        val fab = findViewById<FloatingActionButton>(R.id.notesFab)
-        fab.setOnClickListener{
-            val intent = Intent(this, NewNote::class.java)
-            startActivityForResult(intent, newNoteActivityRequestCode)
-        }
+    setSupportActionBar(findViewById(R.id.noteListToolbar))
+    supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setDisplayShowHomeEnabled(true)
+      setDisplayShowTitleEnabled(true)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    //Recycler view
+    val recyclerView = findViewById<RecyclerView>(R.id.recyclerNotes)
+    val adapter = NoteCardAdapter(this)
+    recyclerView.adapter = adapter
+    recyclerView.layoutManager = LinearLayoutManager(this)
 
-        if(requestCode == newNoteActivityRequestCode && resultCode == RESULT_OK) {
-            data?.getStringArrayExtra(NewNote.EXTRA_REPLY)?.let {
-                val note = Note(noteTitle = it[0], noteText = it[1])
-                noteViewModel.insert(note)
-            }
-        } else {
-            Toast.makeText(applicationContext, R.string.noteNotCreated, Toast.LENGTH_SHORT).show()
-        }
+    //View model
+    noteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
+    noteViewModel.allNotes.observe(this, { notes ->
+        notes?.let { adapter.setNotes(it) }
+    })
+
+    val fab = findViewById<FloatingActionButton>(R.id.notesFab)
+    fab.setOnClickListener {
+      val intent = Intent(this, NewNote::class.java)
+      startActivityForResult(intent, newNoteActivityRequestCode)
     }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+
+    if (requestCode == newNoteActivityRequestCode && resultCode == RESULT_OK) {
+      data?.getStringArrayExtra(NewNote.EXTRA_REPLY)?.let {
+        val note = Note(noteTitle = it[0], noteText = it[1])
+        noteViewModel.insert(note)
+      }
+    } else {
+      Toast.makeText(applicationContext, R.string.noteNotCreated, Toast.LENGTH_SHORT).show()
+    }
+  }
 }

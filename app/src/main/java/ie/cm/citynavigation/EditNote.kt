@@ -10,7 +10,6 @@ import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.viewModel.NoteViewModel
-import kotlinx.android.synthetic.main.activity_edit_note.*
 
 class EditNote : AppCompatActivity() {
   private lateinit var editNoteTitleView: EditText
@@ -54,7 +53,11 @@ class EditNote : AppCompatActivity() {
     }
     R.id.miSave -> {
       val noteId = intent.getStringExtra(NoteCardAdapter.noteId)
-      noteViewModel.updateById(editNoteTitleView.text.toString(), editNoteTextView.text.toString(), noteId.toString())
+      noteViewModel.updateById(
+        editNoteTitleView.text.toString(),
+        editNoteTextView.text.toString(),
+        noteId.toString()
+      )
       Log.d("***aaa", "midone")
       finish()
       true
