@@ -2,11 +2,13 @@ package ie.cm.citynavigation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.viewModel.NoteViewModel
@@ -47,19 +49,23 @@ class EditNote : AppCompatActivity() {
     R.id.miDelete -> {
       val noteId = intent.getStringExtra(NoteCardAdapter.noteId)
       noteViewModel.deleteById(noteId.toString())
-      Log.d("***aaa", "miDelete")
       finish()
       true
     }
     R.id.miSave -> {
       val noteId = intent.getStringExtra(NoteCardAdapter.noteId)
-      noteViewModel.updateById(
-        editNoteTitleView.text.toString(),
-        editNoteTextView.text.toString(),
-        noteId.toString()
-      )
-      Log.d("***aaa", "midone")
-      finish()
+
+      if (TextUtils.isEmpty(editNoteTitleView.text) || TextUtils.isEmpty(editNoteTextView.text)) {
+        Toast.makeText(this, R.string.noteNotUpdated, Toast.LENGTH_SHORT).show()
+      } else {
+        noteViewModel.updateById(
+          editNoteTitleView.text.toString(),
+          editNoteTextView.text.toString(),
+          noteId.toString()
+        )
+        finish()
+      }
+
       true
     }
     else -> super.onOptionsItemSelected(item)

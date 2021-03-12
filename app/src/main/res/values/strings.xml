@@ -27,5 +27,6 @@
     <string name="lorem">Lorem Ipsum</string>
     <string name="loremMail">lorem@ipsum.com</string>
     <string name="noteNotCreated">Note not created</string>
+    <string name="noteNotUpdated">Note not updated</string>
     <string name="notifications">Notifications</string>
 </resources>
