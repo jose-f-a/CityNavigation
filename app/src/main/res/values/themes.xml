@@ -14,6 +14,7 @@
 
     <style name="Theme.CityNavigation.CustomToolbar">
         <item name="android:fontFamily">@font/montserrat</item>
+        <item name="homeAsUpIndicator">@drawable/ic_baseline_chevron_left_24</item>
     </style>
 
     <style name="Theme.CityNavigation.NoActionBar">

@@ -5,20 +5,25 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.res.Resources
+import com.google.android.gms.maps.model.MapStyleOptions
 
 class Map : AppCompatActivity(), OnMapReadyCallback {
 
   //  private lateinit var tempbtn: Button
+  // Mapa
   private lateinit var mMap: GoogleMap
+  private val TAG = Map::class.java.simpleName
 
   // Last known location implementation
   private lateinit var lastLocation: Location
@@ -27,6 +32,9 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   // Periodic location updates
   private lateinit var locationCallback: LocationCallback
   private lateinit var locationRequest: LocationRequest
+
+  // Permission
+  private val REQUEST_LOCATION_PERMISSION = 1
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -57,7 +65,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
         lastLocation = p0.lastLocation
 
         var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15.0f))
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15.0f))
 
         Log.d("****Mapa", "New location received: " + loc.latitude + " - " + loc.longitude)
       }
@@ -77,6 +85,16 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
   override fun onMapReady(googleMap: GoogleMap) {
     mMap = googleMap
+    setMapStyle(mMap)
+    enableMyLocation()
+
+    // Map home coordinates
+    val latitude = 41.698871
+    val longitude = -8.827075
+    val zoomLevel = 15f
+
+    val homeLatLng = LatLng(latitude, longitude)
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
     Log.d("****Mapa", "Entrou no onMapReady")
 
     /*setUpMap()*/
@@ -86,13 +104,39 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ESGT, 12.0f))*/
   }
 
-  /*fun setUpMap() {
-    if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-      ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
-      return
-    }
-  }*/
+  private fun isPermissionGranted(): Boolean {
+    return ContextCompat.checkSelfPermission(
+      this,
+      Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+  }
 
+  private fun enableMyLocation() {
+    if (isPermissionGranted()) {
+      mMap.isMyLocationEnabled = true
+    } else {
+      ActivityCompat.requestPermissions(
+        this,
+        arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+        REQUEST_LOCATION_PERMISSION
+      )
+    }
+  }
+
+  @SuppressLint("MissingSuperCall")
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<String>,
+    grantResults: IntArray
+  ) {
+    // Check if location permissions are granted and if so enable the
+    // location data layer.
+    if (requestCode == REQUEST_LOCATION_PERMISSION) {
+      if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
+        enableMyLocation()
+      }
+    }
+  }
 
   private fun startLocationUpdates() {
     if (ActivityCompat.checkSelfPermission(
@@ -132,6 +176,26 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   companion object {
     private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     private const val REQUEST_CHECK_SETTINGS = 2
+  }
+
+  // Allows map styling and theming to be customized.
+  private fun setMapStyle(map: GoogleMap) {
+    try {
+      // Customize the styling of the base map using a JSON object defined
+      // in a raw resource file.
+      val success = map.setMapStyle(
+        MapStyleOptions.loadRawResourceStyle(
+          this,
+          R.raw.night_map_style
+        )
+      )
+
+      if (!success) {
+        Log.e(TAG, "Style parsing failed.")
+      }
+    } catch (e: Resources.NotFoundException) {
+      Log.e(TAG, "Can't find style. Error: ", e)
+    }
   }
 
 /*  mMap.isMyLocationEnabled = true*/
