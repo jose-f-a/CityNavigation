@@ -16,14 +16,22 @@ import com.google.android.gms.maps.model.LatLng
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.widget.Toast
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
+import ie.cm.citynavigation.api.Endpoints
+import ie.cm.citynavigation.api.Report
+import ie.cm.citynavigation.api.ReportGet
+import ie.cm.citynavigation.api.ServiceBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Map : AppCompatActivity(), OnMapReadyCallback {
 
   //  private lateinit var tempbtn: Button
   // Mapa
   private lateinit var mMap: GoogleMap
-  private val TAG = Map::class.java.simpleName
 
   // Last known location implementation
   private lateinit var lastLocation: Location
@@ -35,6 +43,8 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
   // Permission
   private val REQUEST_LOCATION_PERMISSION = 1
+
+  private lateinit var reports: List<ReportGet>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -60,19 +70,46 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     locationCallback = object : LocationCallback() {
       override fun onLocationResult(p0: LocationResult) {
         super.onLocationResult(p0)
-        Log.d("****Mapa", "Entrou no onLocationResult")
 
         lastLocation = p0.lastLocation
 
         var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15.0f))
-
-        Log.d("****Mapa", "New location received: " + loc.latitude + " - " + loc.longitude)
       }
     }
 
     // Location Request
     createLocationRequest()
+
+    // Markers from WS
+    // Call service and add the markers
+    val request = ServiceBuilder.buildService(Endpoints::class.java)
+    val call = request.getReports()
+    var position: LatLng
+
+    call.enqueue(object : Callback<List<ReportGet>> {
+      override fun onResponse(call: Call<List<ReportGet>>, response: Response<List<ReportGet>>) {
+        Log.d("****Mapa", "Entrou no onResponse")
+        if(response.isSuccessful) {
+          Log.d("****Mapa", "Entrou no If")
+
+          reports = response.body()!!
+
+          for(report in reports) {
+            position = LatLng(report.geo.lat.toString().toDouble(), report.geo.lng.toString().toDouble())
+            mMap.addMarker(MarkerOptions().position(position).title(report.report.titulo))
+
+            Log.d("****Mapa", "Marker: $position")
+          }
+        } else {
+          Log.d("****Mapa", "Entrou no else")
+        }
+      }
+
+      override fun onFailure(call: Call<List<ReportGet>>, t: Throwable) {
+        Log.e("****Mapa", "${t.message}")
+      }
+    })
 
     /*//Butao temporario
     tempbtn = findViewById(R.id.tempbtn)
@@ -95,7 +132,6 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
     val homeLatLng = LatLng(latitude, longitude)
     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
-    Log.d("****Mapa", "Entrou no onMapReady")
 
     /*setUpMap()*/
     /*// Add a marker in ESTG and move the camera
@@ -111,6 +147,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     ) == PackageManager.PERMISSION_GRANTED
   }
 
+  @SuppressLint("MissingPermission")
   private fun enableMyLocation() {
     if (isPermissionGranted()) {
       mMap.isMyLocationEnabled = true
@@ -163,13 +200,11 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
   override fun onPause() {
     super.onPause()
-    Log.d("****Mapa", "Paused")
     fusedLocationClient.removeLocationUpdates(locationCallback)
   }
 
   override fun onResume() {
     super.onResume()
-    Log.d("****Mapa", "Resumed")
     startLocationUpdates()
   }
 
@@ -191,10 +226,10 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
       )
 
       if (!success) {
-        Log.e(TAG, "Style parsing failed.")
+        Log.e("****MapStyle", "Style parsing failed.")
       }
     } catch (e: Resources.NotFoundException) {
-      Log.e(TAG, "Can't find style. Error: ", e)
+      Log.e("****MapStyle", "Can't find style. Error: ", e)
     }
   }
 
