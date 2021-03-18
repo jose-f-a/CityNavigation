@@ -12,4 +12,9 @@ interface Endpoints {
 
   @GET("report")
   fun getReports(): Call<List<ReportGet>>
+
+  @FormUrlEncoded
+  @POST("user/login")
+  fun login(@Field("email") email: String,
+            @Field("password") password: String): Call<OutputLogin>
 }

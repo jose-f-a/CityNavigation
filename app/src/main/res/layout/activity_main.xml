@@ -29,6 +29,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top" />
 
+    <RelativeLayout
+        android:id="@+id/customText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appName">
+
+        <TextView
+            android:id="@+id/welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome"
+            android:textAppearance="@style/noteText" />
+
+        <TextView
+            android:id="@+id/customName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/welcome"
+            android:text="@string/lorem"
+            android:textAppearance="@style/noteText" />
+    </RelativeLayout>
+
     <Button
         android:id="@+id/btnMap"
         android:layout_width="match_parent"
@@ -48,7 +80,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appName"
+        app:layout_constraintTop_toBottomOf="@+id/customText"
         tools:ignore="RtlCompat" />
 
     <Button
@@ -84,8 +116,8 @@
         android:background="@drawable/button_menu"
         android:drawableLeft="@drawable/ic_outline_settings_24"
         android:drawableTint="@color/black_ish"
-        android:text="@string/miSettings"
         android:onClick="openSettings"
+        android:text="@string/miSettings"
         android:textAlignment="textStart"
         android:textAppearance="@style/lButtons"
         android:textColor="@color/black_ish"
@@ -94,7 +126,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnNotes"
-        tools:ignore="RtlCompat"/>
+        tools:ignore="RtlCompat" />
 
     <Button
         android:id="@+id/btnLogout"
@@ -107,7 +139,7 @@
         android:drawableLeft="@drawable/ic_outline_exit_to_app_24"
         android:drawableTint="@color/black_ish"
         android:gravity="center"
-        android:onClick="openLogin"
+        android:onClick="logout"
         android:text="@string/miLogout"
         android:textAlignment="textStart"
         android:textAppearance="@style/lButtons"
