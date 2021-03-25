@@ -15,10 +15,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Resources
 import android.widget.Toast
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.api.Endpoints
 import ie.cm.citynavigation.api.Report
 import ie.cm.citynavigation.api.ReportGet
@@ -26,6 +28,7 @@ import ie.cm.citynavigation.api.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.collections.Map
 
 class Map : AppCompatActivity(), OnMapReadyCallback {
 
@@ -89,14 +92,12 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
     call.enqueue(object : Callback<List<ReportGet>> {
       override fun onResponse(call: Call<List<ReportGet>>, response: Response<List<ReportGet>>) {
-        Log.d("****Mapa", "Entrou no onResponse")
-        if(response.isSuccessful) {
-          Log.d("****Mapa", "Entrou no If")
-
+        if (response.isSuccessful) {
           reports = response.body()!!
 
-          for(report in reports) {
-            position = LatLng(report.geo.lat.toString().toDouble(), report.geo.lng.toString().toDouble())
+          for (report in reports) {
+            position =
+              LatLng(report.geo.lat.toString().toDouble(), report.geo.lng.toString().toDouble())
             mMap.addMarker(MarkerOptions().position(position).title(report.report.titulo))
 
             Log.d("****Mapa", "Marker: $position")
@@ -120,24 +121,33 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     }*/
   }
 
+  // Long pressing on the map it opens New Report Activity
+  private fun setMapLongClick(map: GoogleMap) {
+    map.setOnMapLongClickListener { latLng ->
+      val nr = Intent(this, NewReport::class.java).apply {
+        putExtra(COORD, latLng.toString())
+      }
+      startActivity(nr)
+    }
+  }
+
   override fun onMapReady(googleMap: GoogleMap) {
     mMap = googleMap
     setMapStyle(mMap)
     enableMyLocation()
+    setMapLongClick(mMap)
 
     // Map home coordinates
-    val latitude = 41.698871
-    val longitude = -8.827075
-    val zoomLevel = 15f
+    val homeLatLng = LatLng(41.698871, -8.827075)
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, 15f))
 
-    val homeLatLng = LatLng(latitude, longitude)
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
-
-    /*setUpMap()*/
-    /*// Add a marker in ESTG and move the camera
+    /*
+    setUpMap()
+    // Add a marker in ESTG and move the camera
     val ESGT = LatLng(41.693408, -8.846684)
     mMap.addMarker(MarkerOptions().position(ESGT).title("Marker in ESTG"))
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ESGT, 12.0f))*/
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ESGT, 12.0f))
+    */
   }
 
   private fun isPermissionGranted(): Boolean {
@@ -210,7 +220,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
   companion object {
     private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-    private const val REQUEST_CHECK_SETTINGS = 2
+    const val COORD = "coordinates"
   }
 
   // Allows map styling and theming to be customized.
@@ -232,7 +242,4 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
       Log.e("****MapStyle", "Can't find style. Error: ", e)
     }
   }
-
-/*  mMap.isMyLocationEnabled = true*/
-
 }

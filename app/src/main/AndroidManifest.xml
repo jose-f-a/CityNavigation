@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ie.cm.citynavigation">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -39,16 +38,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.CityNavigation.NoActionBar" />
-
         <activity
             android:name=".Map"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.CityNavigation.NoActionBar" />
-
+        <activity
+            android:name=".NewReport"
+            android:parentActivityName=".Map"
+            android:theme="@style/Theme.CityNavigation.NoActionBar" />
         <activity
             android:name=".NoteList"
             android:parentActivityName=".MainActivity"
@@ -61,7 +61,6 @@
             android:name=".EditNote"
             android:parentActivityName=".NoteList"
             android:theme="@style/Theme.CityNavigation.NoActionBar" />
-
         <activity
             android:name=".Settings"
             android:parentActivityName=".MainActivity"
