@@ -133,12 +133,12 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
         val lat = latLng.latitude
         val lng = latLng.longitude
 
-        val nr = Intent(this, NewReport::class.java).apply {
-          putExtra(LAT, lat)
-          putExtra(LNG, lng)
-          putExtra(USERID, userId)
+        Intent(this, NewReport::class.java).also {
+          it.putExtra("LAT", lat)
+          it.putExtra("LNG", lng)
+          it.putExtra("USERID", userId)
+          startActivity(it)
         }
-        startActivity(nr)
       }
     } else {
      KToasty.info(this, getString(R.string.loginNeeded), Toast.LENGTH_LONG).show()

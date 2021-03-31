@@ -39,9 +39,9 @@ class NewReport : AppCompatActivity() {
     setContentView(R.layout.activity_new_report)
 
     // Getting data from previous activity
-    lat = intent.getDoubleExtra(Map.LAT, 0.0)
-    lng = intent.getDoubleExtra(Map.LNG, 0.0)
-    userId = intent.getIntExtra(Map.USERID, 0)
+    lat = intent.getDoubleExtra("LAT", 0.0)
+    lng = intent.getDoubleExtra("LNG", 0.0)
+    userId = intent.getIntExtra("USERID", 0)
 
     if (userId == 0) {
       finish()
@@ -70,11 +70,10 @@ class NewReport : AppCompatActivity() {
     R.id.miDone -> {
       val replyIntent = Intent()
       if (TextUtils.isEmpty(newReportTitleView.text) || TextUtils.isEmpty(newReportTextView.text)) {
-        Toast.makeText(this, R.string.emptyFields, Toast.LENGTH_SHORT).show()
+        KToasty.warning(this, getString(R.string.emptyFields), Toast.LENGTH_SHORT).show()
       } else {
         newReport(userId, lat, lng)
       }
-      finish()
       true
     }
     R.id.miCancel -> {
@@ -106,6 +105,7 @@ class NewReport : AppCompatActivity() {
           KToasty.error(this@NewReport, getString(R.string.error), Toast.LENGTH_SHORT).show()
         } else {
           KToasty.success(this@NewReport, getString(R.string.reportCreated), Toast.LENGTH_SHORT).show()
+          finish()
         }
       }
 
