@@ -9,22 +9,51 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
+import android.widget.Toast
+import androidx.core.view.children
+import com.droidman.ktoasty.KToasty
+import com.google.android.material.chip.Chip
+import ie.cm.citynavigation.api.Endpoints
+import ie.cm.citynavigation.api.OutputLogin
+import ie.cm.citynavigation.api.OutputNewReport
+import ie.cm.citynavigation.api.ServiceBuilder
+import kotlinx.android.synthetic.main.activity_new_report.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class NewReport : AppCompatActivity() {
+  private lateinit var newReportTitleView: EditText
+  private lateinit var newReportTextView: EditText
+
+  private var userId: Int = 0
+  private var lat: Double = 0.0
+  private var lng: Double = 0.0
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_new_report)
 
-    // Getting the coordinates from previous activity
-    val coord = intent.getStringExtra(Map.COORD)
-    if (coord != null) {
-      Log.d("****NewNote", coord)
-    } else {
-       finish()
+    // Getting data from previous activity
+    lat = intent.getDoubleExtra(Map.LAT, 0.0)
+    lng = intent.getDoubleExtra(Map.LNG, 0.0)
+    userId = intent.getIntExtra(Map.USERID, 0)
+
+    if (userId == 0) {
+      finish()
     }
 
     //Toolbar
     setSupportActionBar(findViewById(R.id.newReportToolbar))
+    supportActionBar?.setTitle(R.string.newReport)
+
+    //Inputs
+    newReportTitleView = findViewById(R.id.newReportTitleText)
+    newReportTextView = findViewById(R.id.newReportTextText)
   }
 
   //Toolbar Menu
@@ -40,16 +69,11 @@ class NewReport : AppCompatActivity() {
     }
     R.id.miDone -> {
       val replyIntent = Intent()
-      /*if (TextUtils.isEmpty(newNoteTitleView.text) || TextUtils.isEmpty(newNoteTextView.text)) {
-        setResult(Activity.RESULT_CANCELED, replyIntent)
+      if (TextUtils.isEmpty(newReportTitleView.text) || TextUtils.isEmpty(newReportTextView.text)) {
+        Toast.makeText(this, R.string.emptyFields, Toast.LENGTH_SHORT).show()
       } else {
-        val noteTitle = newNoteTitleView.text.toString()
-        val noteText = newNoteTextView.text.toString()
-
-        replyIntent.putExtra(NewNote.EXTRA_REPLY, arrayOf(noteTitle, noteText))
-
-        setResult(Activity.RESULT_OK, replyIntent)
-      }*/
+        newReport(userId, lat, lng)
+      }
       finish()
       true
     }
@@ -60,5 +84,35 @@ class NewReport : AppCompatActivity() {
     else -> {
       super.onOptionsItemSelected(item)
     }
+  }
+
+  private fun newReport(user_id: Int, lat: Double, lng: Double) {
+    val titulo = newReportTitleView.text.toString()
+    val descricao = newReportTextView.text.toString()
+    val data = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+    //val categoria_id = chip_group.checkedChipId
+    val categoria_id = 1
+    Log.d("****NewReport", "Categoria: $categoria_id")
+
+    val request = ServiceBuilder.buildService(Endpoints::class.java)
+    val call = request.newReport(titulo, descricao, data, lat, lng, categoria_id, user_id)
+
+    call.enqueue(object : Callback<OutputNewReport> {
+      override fun onResponse(call: Call<OutputNewReport>, response: Response<OutputNewReport>) {
+        val r: OutputNewReport = response.body()!!
+        Log.d("****NewReport", r.toString())
+
+        if (!r.status) {
+          KToasty.error(this@NewReport, getString(R.string.error), Toast.LENGTH_SHORT).show()
+        } else {
+          KToasty.success(this@NewReport, getString(R.string.reportCreated), Toast.LENGTH_SHORT).show()
+        }
+      }
+
+      override fun onFailure(call: Call<OutputNewReport>, t: Throwable) {
+        Log.e("****NewReport", "onFailure: ${t.message}")
+        KToasty.error(this@NewReport, getString(R.string.loginFailed), Toast.LENGTH_SHORT).show()
+      }
+    })
   }
 }
