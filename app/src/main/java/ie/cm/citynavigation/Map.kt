@@ -83,6 +83,19 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     // Location Request
     createLocationRequest()
 
+    // Get WS Markers
+    getReports()
+
+    /*//Butao temporario
+    tempbtn = findViewById(R.id.tempbtn)
+    val reportFragment = ReportFragment()
+
+    tempbtn.setOnClickListener {
+      reportFragment.show(supportFragmentManager, "aaa")
+    }*/
+  }
+
+  private fun getReports() {
     // Call service and add the markers
     val request = ServiceBuilder.buildService(Endpoints::class.java)
     val call = request.getReports()
@@ -108,14 +121,6 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
         Log.e("****Mapa", "${t.message}")
       }
     })
-
-    /*//Butao temporario
-    tempbtn = findViewById(R.id.tempbtn)
-    val reportFragment = ReportFragment()
-
-    tempbtn.setOnClickListener {
-      reportFragment.show(supportFragmentManager, "aaa")
-    }*/
   }
 
   // Long pressing on the map it opens New Report Activity
@@ -224,13 +229,11 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   override fun onResume() {
     super.onResume()
     startLocationUpdates()
+    getReports()
   }
 
   companion object {
     private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-    const val LAT = "0.0"
-    const val LNG = "0.0"
-    const val USERID = "0"
   }
 
   // Allows map styling and theming to be customized.
