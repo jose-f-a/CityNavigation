@@ -9,12 +9,13 @@
     <string name="userId">id</string>
 
     <!-- Menu Items -->
-    <string name="miHome">Home</string>
+    <string name="miHome">Map</string>
     <string name="miNotes">Notes</string>
     <string name="miSettings">Settings</string>
     <string name="miLogout">Logout</string>
     <string name="miSave">Save</string>
     <string name="miDelete">Delete</string>
+    <string name="none"/>
 
     <!-- Login -->
     <string name="withoutLogin"><u>Continue without login</u></string>
@@ -35,6 +36,7 @@
     <string name="noteNotCreated">Note not created</string>
     <string name="noteNotUpdated">Note not updated</string>
     <string name="reportCreated">Report Created</string>
+    <string name="cantCamera">Cant open camera</string>
 
     <!-- Dialog -->
     <string name="open">Drawer Opened</string>
@@ -64,4 +66,5 @@
     <!-- Chips -->
     <string name="road">Road</string>
     <string name="nature">Nature</string>
+    <string name="construction">Construction</string>
 </resources>

@@ -24,6 +24,7 @@ interface Endpoints {
   fun newReport(@Field("titulo") titulo: String,
                 @Field("descricao") descricao: String,
                 @Field("data") data: String,
+                @Field("imagem") imagem: String,
                 @Field("latitude") latitude: Double,
                 @Field("longitude") longitude: Double,
                 @Field("user_id") user_id: Int,

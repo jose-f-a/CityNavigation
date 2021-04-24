@@ -61,6 +61,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
       setDisplayHomeAsUpEnabled(true)
       setDisplayShowHomeEnabled(true)
       setDisplayShowTitleEnabled(true)
+      setDisplayShowTitleEnabled(false)
     }
 
     // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -155,6 +156,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     setMapStyle(mMap)
     enableMyLocation()
     setMapLongClick(mMap)
+    mMap.uiSettings.isMyLocationButtonEnabled = false
 
     // Map home coordinates
     val homeLatLng = LatLng(41.698871, -8.827075)
