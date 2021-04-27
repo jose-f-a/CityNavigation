@@ -84,9 +84,6 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     // Location Request
     createLocationRequest()
 
-    // Get WS Markers
-    getReports()
-
     /*//Butao temporario
     tempbtn = findViewById(R.id.tempbtn)
     val reportFragment = ReportFragment()
@@ -163,6 +160,8 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, 15f))
 
     //setUpMap()
+    // Get WS Markers
+    getReports()
   }
 
   private fun isPermissionGranted(): Boolean {

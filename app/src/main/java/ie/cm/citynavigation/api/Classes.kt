@@ -8,7 +8,7 @@ data class Report(
   val titulo: String,
   val descricao: String,
   val data: String,
-  val imagem: Blob,
+  val imagem: String,
   val latitude: String,
   val longitude: String,
   val user_id: Int,
