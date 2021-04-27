@@ -15,17 +15,22 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.widget.Toast
+import com.droidman.ktoasty.KToasty
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.api.Endpoints
 import ie.cm.citynavigation.api.Report
-import ie.cm.citynavigation.api.ReportGet
 import ie.cm.citynavigation.api.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.collections.Map
 
 class Map : AppCompatActivity(), OnMapReadyCallback {
 
@@ -44,7 +49,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   // Permission
   private val REQUEST_LOCATION_PERMISSION = 1
 
-  private lateinit var reports: List<ReportGet>
+  private lateinit var reports: List<Report>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -56,6 +61,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
       setDisplayHomeAsUpEnabled(true)
       setDisplayShowHomeEnabled(true)
       setDisplayShowTitleEnabled(true)
+      setDisplayShowTitleEnabled(false)
     }
 
     // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -70,46 +76,13 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     locationCallback = object : LocationCallback() {
       override fun onLocationResult(p0: LocationResult) {
         super.onLocationResult(p0)
-
         lastLocation = p0.lastLocation
-
         var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15.0f))
       }
     }
 
     // Location Request
     createLocationRequest()
-
-    // Markers from WS
-    // Call service and add the markers
-    val request = ServiceBuilder.buildService(Endpoints::class.java)
-    val call = request.getReports()
-    var position: LatLng
-
-    call.enqueue(object : Callback<List<ReportGet>> {
-      override fun onResponse(call: Call<List<ReportGet>>, response: Response<List<ReportGet>>) {
-        Log.d("****Mapa", "Entrou no onResponse")
-        if(response.isSuccessful) {
-          Log.d("****Mapa", "Entrou no If")
-
-          reports = response.body()!!
-
-          for(report in reports) {
-            position = LatLng(report.geo.lat.toString().toDouble(), report.geo.lng.toString().toDouble())
-            mMap.addMarker(MarkerOptions().position(position).title(report.report.titulo))
-
-            Log.d("****Mapa", "Marker: $position")
-          }
-        } else {
-          Log.d("****Mapa", "Entrou no else")
-        }
-      }
-
-      override fun onFailure(call: Call<List<ReportGet>>, t: Throwable) {
-        Log.e("****Mapa", "${t.message}")
-      }
-    })
 
     /*//Butao temporario
     tempbtn = findViewById(R.id.tempbtn)
@@ -120,24 +93,75 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     }*/
   }
 
+  private fun getReports() {
+    // Call service and add the markers
+    val request = ServiceBuilder.buildService(Endpoints::class.java)
+    val call = request.getReports()
+    var position: LatLng
+
+    call.enqueue(object : Callback<List<Report>> {
+      override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>) {
+        if (response.isSuccessful) {
+          reports = response.body()!!
+
+          for (report in reports) {
+            position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
+            mMap.addMarker(MarkerOptions().position(position).title(report.titulo))
+
+            Log.d("****Mapa", "Marker: $position")
+          }
+        } else {
+          Log.d("****Mapa", "Entrou no else")
+        }
+      }
+
+      override fun onFailure(call: Call<List<Report>>, t: Throwable) {
+        Log.e("****Mapa", "${t.message}")
+      }
+    })
+  }
+
+  // Long pressing on the map it opens New Report Activity
+  private fun setMapLongClick(map: GoogleMap) {
+    // Check if a user is logged in
+    val sharedPref: SharedPreferences = getSharedPreferences(
+      getString(R.string.preference_file_key),
+      Context.MODE_PRIVATE
+    )
+    val isLogged = sharedPref.getBoolean(getString(R.string.logged), false)
+    val userId = sharedPref.getInt(getString(R.string.userId), 0)
+
+    if(isLogged) {
+      map.setOnMapLongClickListener { latLng ->
+        val lat = latLng.latitude
+        val lng = latLng.longitude
+
+        Intent(this, NewReport::class.java).also {
+          it.putExtra("LAT", lat)
+          it.putExtra("LNG", lng)
+          it.putExtra("USERID", userId)
+          startActivity(it)
+        }
+      }
+    } else {
+     KToasty.info(this, getString(R.string.loginNeeded), Toast.LENGTH_LONG).show()
+    }
+  }
+
   override fun onMapReady(googleMap: GoogleMap) {
     mMap = googleMap
     setMapStyle(mMap)
     enableMyLocation()
+    setMapLongClick(mMap)
+    mMap.uiSettings.isMyLocationButtonEnabled = false
 
     // Map home coordinates
-    val latitude = 41.698871
-    val longitude = -8.827075
-    val zoomLevel = 15f
+    val homeLatLng = LatLng(41.698871, -8.827075)
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, 15f))
 
-    val homeLatLng = LatLng(latitude, longitude)
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
-
-    /*setUpMap()*/
-    /*// Add a marker in ESTG and move the camera
-    val ESGT = LatLng(41.693408, -8.846684)
-    mMap.addMarker(MarkerOptions().position(ESGT).title("Marker in ESTG"))
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ESGT, 12.0f))*/
+    //setUpMap()
+    // Get WS Markers
+    getReports()
   }
 
   private fun isPermissionGranted(): Boolean {
@@ -206,11 +230,11 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   override fun onResume() {
     super.onResume()
     startLocationUpdates()
+    getReports()
   }
 
   companion object {
     private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-    private const val REQUEST_CHECK_SETTINGS = 2
   }
 
   // Allows map styling and theming to be customized.
@@ -232,7 +256,4 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
       Log.e("****MapStyle", "Can't find style. Error: ", e)
     }
   }
-
-/*  mMap.isMyLocationEnabled = true*/
-
 }

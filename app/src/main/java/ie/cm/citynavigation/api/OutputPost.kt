@@ -7,3 +7,8 @@ data class OutputLogin(
   val nome: String
 )
 
+data class OutputNewReport (
+  val status: Boolean,
+  val msg: String
+)
+

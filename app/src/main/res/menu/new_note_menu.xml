@@ -4,17 +4,21 @@
 
     <item
         android:id="@+id/miPicture"
-        android:title="@string/addPhoto"
         android:icon="@drawable/ic_outline_camera_alt_24"
-        app:showAsAction="ifRoom"/>
+        android:iconTint="@color/black_ish"
+        
+        android:title="@string/addPhoto"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/miCancel"
-        android:title="@string/cancel"
         android:icon="@drawable/ic_baseline_close_24"
-        app:showAsAction="ifRoom"/>
+        android:iconTint="@color/black_ish"
+        android:title="@string/cancel"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/miDone"
-        android:title="@string/addNote"
         android:icon="@drawable/ic_baseline_done_24"
-        app:showAsAction="ifRoom"/>
+        android:iconTint="@color/black_ish"
+        android:title="@string/addNote"
+        app:showAsAction="ifRoom" />
 </menu>

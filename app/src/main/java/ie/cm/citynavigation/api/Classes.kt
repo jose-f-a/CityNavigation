@@ -8,21 +8,11 @@ data class Report(
   val titulo: String,
   val descricao: String,
   val data: String,
-  val imagem: Blob,
-  val geo_id: Int,
+  val imagem: String,
+  val latitude: String,
+  val longitude: String,
   val user_id: Int,
   val categoria_id: Int
-)
-
-data class ReportGet(
-  val report: Report,
-  val geo: Geo
-)
-
-data class Geo(
-  val id: Int,
-  val lat: String,
-  val lng: String
 )
 
 data class User(

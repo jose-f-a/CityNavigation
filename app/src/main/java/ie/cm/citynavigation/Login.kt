@@ -93,13 +93,11 @@ class Login : AppCompatActivity() {
         }
 
         override fun onFailure(call: Call<OutputLogin>, t: Throwable) {
-          Log.e("****Login", "onFailure: ${t.message}")
-          KToasty.error(this@Login, getString(R.string.loginFailed), Toast.LENGTH_SHORT).show()
-          loginProgressView.visibility = View.GONE
+          Log.e("****Login", "${t.message}")
         }
       })
     } else {
-      KToasty.info(this, getString(R.string.emptyLogin), Toast.LENGTH_SHORT).show()
+      KToasty.info(this, getString(R.string.emptyFields), Toast.LENGTH_SHORT).show()
       loginProgressView.visibility = View.GONE
     }
     closeKeyBoard()

@@ -9,37 +9,62 @@
     <string name="userId">id</string>
 
     <!-- Menu Items -->
-    <string name="miHome">Home</string>
+    <string name="miHome">Map</string>
     <string name="miNotes">Notes</string>
     <string name="miSettings">Settings</string>
     <string name="miLogout">Logout</string>
     <string name="miSave">Save</string>
     <string name="miDelete">Delete</string>
+    <string name="none"/>
+
+    <!-- Login -->
+    <string name="withoutLogin"><u>Continue without login</u></string>
+    <string name="loginFailed">Login failed</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+
+
+    <!-- Main Activity -->
+    <string name="welcome">Welcome</string>
+    <string name="stranger">Stranger</string>
+
+    <!-- Toasts -->
+    <string name="emptyFields">Please, fill the textfields</string>
+    <string name="loginNeeded">Please Login, to create Report</string>
+    <string name="error">Something went wrong, try again</string>
+    <string name="noteNotCreated">Note not created</string>
+    <string name="noteNotUpdated">Note not updated</string>
+    <string name="reportCreated">Report Created</string>
+    <string name="cantCamera">Cant open camera</string>
 
     <!-- Dialog -->
     <string name="open">Drawer Opened</string>
     <string name="close">Drawer Closed</string>
 
-    <string name="withoutLogin"><u>Continue without login</u></string>
-    <string name="emptyLogin">Please, fill the textfields</string>
-    <string name="loginFailed">Login failed</string>
+    <!-- Notes/Reports -->
     <string name="title">Title</string>
     <string name="insertText">Insert Text</string>
+    <string name="addPhoto">Add Photo</string>
+    <string name="cancel">Cancel</string>
+
     <string name="newNote">New Note</string>
     <string name="editNote">Edit Note</string>
     <string name="addNote">Add Note</string>
-    <string name="addPhoto">Add Photo</string>
-    <string name="cancel">Cancel</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="login">Login</string>
+
+
+    <string name="category">Category</string>
+    <string name="newReport">New Report</string>
+
+    <!-- Placeholder -->
     <string name="lorem">Lorem Ipsum</string>
     <string name="loremMail">lorem@ipsum.com</string>
-    <string name="noteNotCreated">Note not created</string>
-    <string name="noteNotUpdated">Note not updated</string>
+
     <string name="notifications">Notifications</string>
     <string name="title_activity_maps">Map</string>
 
-    <string name="welcome">Welcome</string>
-    <string name="stranger">Stranger</string>
+    <!-- Chips -->
+    <string name="road">Road</string>
+    <string name="nature">Nature</string>
+    <string name="construction">Construction</string>
 </resources>
