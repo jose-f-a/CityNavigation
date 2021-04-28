@@ -12,3 +12,6 @@ data class OutputNewReport (
   val msg: String
 )
 
+data class OutputDeleteReport (
+  val msg: String
+)

@@ -22,6 +22,7 @@ import android.content.res.Resources
 import android.widget.Toast
 import com.droidman.ktoasty.KToasty
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.api.Endpoints
@@ -50,6 +51,9 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   private val REQUEST_LOCATION_PERMISSION = 1
 
   private lateinit var reports: List<Report>
+
+  private var isLogged: Boolean = false
+  private var userId: Int = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -84,6 +88,14 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     // Location Request
     createLocationRequest()
 
+    // Get Shared Preferences
+    val sharedPref: SharedPreferences = getSharedPreferences(
+      getString(R.string.preference_file_key),
+      Context.MODE_PRIVATE
+    )
+    isLogged = sharedPref.getBoolean(getString(R.string.logged), false)
+    userId = sharedPref.getInt(getString(R.string.userId), 0)
+
     /*//Butao temporario
     tempbtn = findViewById(R.id.tempbtn)
     val reportFragment = ReportFragment()
@@ -106,12 +118,10 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
           for (report in reports) {
             position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
-            mMap.addMarker(MarkerOptions().position(position).title(report.titulo))
-
-            Log.d("****Mapa", "Marker: $position")
+            mMap.addMarker(MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString()))
           }
         } else {
-          Log.d("****Mapa", "Entrou no else")
+          KToasty.warning(this@Map, getString(R.string.error), Toast.LENGTH_SHORT).show()
         }
       }
 
@@ -124,12 +134,12 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   // Long pressing on the map it opens New Report Activity
   private fun setMapLongClick(map: GoogleMap) {
     // Check if a user is logged in
-    val sharedPref: SharedPreferences = getSharedPreferences(
+    /*val sharedPref: SharedPreferences = getSharedPreferences(
       getString(R.string.preference_file_key),
       Context.MODE_PRIVATE
     )
     val isLogged = sharedPref.getBoolean(getString(R.string.logged), false)
-    val userId = sharedPref.getInt(getString(R.string.userId), 0)
+    val userId = sharedPref.getInt(getString(R.string.userId), 0)*/
 
     if(isLogged) {
       map.setOnMapLongClickListener { latLng ->
@@ -162,6 +172,21 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     //setUpMap()
     // Get WS Markers
     getReports()
+
+    mMap.let {
+      it.setOnMarkerClickListener {
+        val bundle = Bundle()
+        bundle.putInt("USER", userId)
+        bundle.putBoolean("LOGGED", isLogged)
+        bundle.putInt("REPORT", it.snippet.toInt())
+
+        val reportFragment = ReportFragment()
+        reportFragment.arguments = bundle
+        reportFragment.show(supportFragmentManager, "aaa")
+
+        false
+      }
+    }
   }
 
   private fun isPermissionGranted(): Boolean {

@@ -15,7 +15,7 @@
     <string name="miLogout">Logout</string>
     <string name="miSave">Save</string>
     <string name="miDelete">Delete</string>
-    <string name="none"/>
+    <string name="none" />
 
     <!-- Login -->
     <string name="withoutLogin"><u>Continue without login</u></string>
@@ -55,6 +55,8 @@
 
     <string name="category">Category</string>
     <string name="newReport">New Report</string>
+    <string name="editReport">Edit Report</string>
+    <string name="deleteReport">Delete Report</string>
 
     <!-- Placeholder -->
     <string name="lorem">Lorem Ipsum</string>

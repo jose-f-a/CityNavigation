@@ -1,34 +1,36 @@
 package ie.cm.citynavigation
 
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import android.widget.ViewFlipper
+import com.droidman.ktoasty.KToasty
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import ie.cm.citynavigation.api.*
+import kotlinx.android.synthetic.main.fragment_report.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.InputStream
+import java.net.URL
 
 
 class ReportFragment : BottomSheetDialogFragment() {
-
-  //Variável tipo ViewFlipper
-  lateinit var vFlipper: ViewFlipper
-
-  // TODO: Rename and change types of parameters
-  private var param1: String? = null
-  private var param2: String? = null
+  private lateinit var report: List<Report>
+  private var isLogged: Boolean = false
+  private var userId: Int = 0
+  private var reportId: Int = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    arguments?.let {
-      param1 = it.getString(ARG_PARAM1)
-      param2 = it.getString(ARG_PARAM2)
-    }
   }
 
   override fun onCreateView(
@@ -38,50 +40,78 @@ class ReportFragment : BottomSheetDialogFragment() {
     // Inflate the layout for this fragment
     val root = inflater.inflate(R.layout.fragment_report, container, false)
 
-    vFlipper = root.findViewById(R.id.reportImages)
+    report = listOf<Report>()
 
-    //As imagens "imagens" são colocadas dentro do ViewFlipper
-    val images =
-      arrayOf(R.drawable.img_slider_1, R.drawable.img_slider_2, R.drawable.img_slider_3)
+    userId = (arguments?.getInt("USER") ?: Int) as Int
+    isLogged = (arguments?.getBoolean("LOGGED") ?: Boolean) as Boolean
+    reportId = (arguments?.getInt("REPORT") ?: Int) as Int
 
-    for (image in images) {
-      imageSlider(image)
+    getReport(reportId, root)
+
+    // Buttons
+    root.editReport.setOnClickListener {
+      Intent(activity, EditReport::class.java). also {
+        it.putExtra("REPORT", reportId)
+        startActivity(it)
+      }
     }
+
     return root
   }
 
-  companion object {
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReportFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    @JvmStatic
-    fun newInstance(param1: String, param2: String) =
-      ReportFragment().apply {
-        arguments = Bundle().apply {
-          putString(ARG_PARAM1, param1)
-          putString(ARG_PARAM2, param2)
+  private fun getReport(reportId : Int, root: View) {
+    // Call service and add the markers
+    val request = ServiceBuilder.buildService(Endpoints::class.java)
+    val call = request.getReport(reportId)
+
+    call.enqueue(object : Callback<List<Report>> {
+      override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>) {
+        if (response.isSuccessful) {
+          report = response.body()!!
+          fillFields(root, report)
+        } else {
+          Toast.makeText(activity, getString(R.string.error), Toast.LENGTH_SHORT).show()
         }
       }
+
+      override fun onFailure(call: Call<List<Report>>, t: Throwable) {
+        Log.e("****Mapa", "${t.message}")
+      }
+    })
   }
 
-  //Método que injeta as imagens para o flipper
-  fun imageSlider(image: Int) {
-    val imageView: ImageView = ImageView(this.requireContext())
-    imageView.setBackgroundResource(image)
 
-    //Imagem adicionada no ViewFlipper -> 4s -> flipper automatico
-    vFlipper.addView(imageView)
-    vFlipper.flipInterval = 3000
-    vFlipper.isAutoStart = true
+  private fun fillFields(root: View, report: List<Report>) {
+    // Button Visibility
+    if (!isLogged || userId != report[0].user_id) {
+      root.editReport.visibility = View.GONE
+    }
 
-    //Direção da animação de transição -> da direita para a esquerda
-    vFlipper.setOutAnimation(this.requireContext(), android.R.anim.slide_out_right)
-    vFlipper.setInAnimation(this.requireContext(), android.R.anim.slide_in_left)
+    // Report info
+    root.reportTitle.text = report[0].titulo
+    root.reportText.text = report[0].descricao
+    root.reportCategoria.text = when (report[0].categoria_id) {
+      1 -> getString(R.string.road)
+      2 -> getString(R.string.nature)
+      3 -> getString(R.string.construction)
+      else -> getString(R.string.error)
+    }
+
+    /*var imageUrl = "https://citynavigation.000webhostapp.com/citynavigation/images/" + report[0].imagem
+    Log.d("****Frag", imageUrl)
+    var inputStream: InputStream = URL(imageUrl).openStream()
+    var bitmap = BitmapFactory.decodeStream(inputStream)
+    root.reportImage.setImageBitmap(bitmap)*/
   }
+
+  /*fun editReportt(view: View) {
+    Intent(activity, EditReport::class.java). also {
+      it.putExtra("REPORT", reportId)
+      startActivity(it)
+    }
+  }
+
+  fun deleteReportt(view: View) {
+
+  }*/
 }

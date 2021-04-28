@@ -18,23 +18,33 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/button_login" />
 
-        <ViewFlipper
-            android:id="@+id/reportImages"
+        <ImageView
+            android:id="@+id/reportImage"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="400dp"
             android:layout_gravity="center"
             android:layout_margin="16dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/reportCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp" />
 
         <TextView
             android:id="@+id/reportTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
             android:text="@string/lorem"
             android:textAppearance="@style/reportTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/reportImages" />
+            app:layout_constraintTop_toBottomOf="@id/reportImage" />
 
         <TextView
             android:id="@+id/reportText"
@@ -54,16 +64,13 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/editReport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="@string/editReport"
+                android:textAppearance="@style/lButtons"/>
         </LinearLayout>
     </LinearLayout>
 
