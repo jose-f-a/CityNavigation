@@ -150,7 +150,7 @@ class NewReport : AppCompatActivity() {
 
       override fun onFailure(call: Call<OutputNewReport>, t: Throwable) {
         Log.e("****NewReport", "onFailure: ${t.message}")
-        KToasty.error(this@NewReport, getString(R.string.loginFailed), Toast.LENGTH_SHORT).show()
+        KToasty.error(this@NewReport, getString(R.string.error), Toast.LENGTH_SHORT).show()
       }
     })
   }

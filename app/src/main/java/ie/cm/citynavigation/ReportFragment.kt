@@ -2,7 +2,9 @@ package ie.cm.citynavigation
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -97,21 +99,14 @@ class ReportFragment : BottomSheetDialogFragment() {
       else -> getString(R.string.error)
     }
 
-    /*var imageUrl = "https://citynavigation.000webhostapp.com/citynavigation/images/" + report[0].imagem
-    Log.d("****Frag", imageUrl)
-    var inputStream: InputStream = URL(imageUrl).openStream()
-    var bitmap = BitmapFactory.decodeStream(inputStream)
-    root.reportImage.setImageBitmap(bitmap)*/
-  }
-
-  /*fun editReportt(view: View) {
-    Intent(activity, EditReport::class.java). also {
-      it.putExtra("REPORT", reportId)
-      startActivity(it)
+    if (Build.VERSION.SDK_INT > 9) {
+      val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+      StrictMode.setThreadPolicy(policy)
     }
+    val imageUrl = "https://citynavigation.000webhostapp.com/citynavigation/images/" + report[0].imagem
+    Log.d("****Frag", imageUrl)
+    val inputStream: InputStream = URL(imageUrl).openStream()
+    val bitmap = BitmapFactory.decodeStream(inputStream)
+    root.reportImage.setImageBitmap(bitmap)
   }
-
-  fun deleteReportt(view: View) {
-
-  }*/
 }

@@ -13,5 +13,11 @@ data class OutputNewReport (
 )
 
 data class OutputDeleteReport (
+  val status: Boolean,
+  val msg: String
+)
+
+data class OutputEditReport (
+  val status: Boolean,
   val msg: String
 )

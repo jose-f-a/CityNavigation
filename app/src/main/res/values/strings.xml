@@ -36,6 +36,8 @@
     <string name="noteNotCreated">Note not created</string>
     <string name="noteNotUpdated">Note not updated</string>
     <string name="reportCreated">Report Created</string>
+    <string name="reportUpdated">Report Updated</string>
+    <string name="reportDeleted">Report Deleted</string>
     <string name="cantCamera">Cant open camera</string>
 
     <!-- Dialog -->

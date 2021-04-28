@@ -122,7 +122,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/road"
-                android:textAppearance="@style/chip" />
+                android:textAppearance="@style/chip"
+                android:checked="true"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipNature"
@@ -137,7 +138,6 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:text="@string/construction"
                 android:textAppearance="@style/chip" />
         </com.google.android.material.chip.ChipGroup>

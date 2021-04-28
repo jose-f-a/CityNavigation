@@ -13,8 +13,10 @@ interface Endpoints {
 
   @FormUrlEncoded
   @POST("user/login")
-  fun login(@Field("email") email: String,
-            @Field("password") password: String): Call<OutputLogin>
+  fun login(
+    @Field("email") email: String,
+    @Field("password") password: String
+  ): Call<OutputLogin>
 
   @GET("reports")
   fun getReports(): Call<List<Report>>
@@ -24,15 +26,26 @@ interface Endpoints {
 
   @FormUrlEncoded
   @POST("report/new")
-  fun newReport(@Field("titulo") titulo: String,
-                @Field("descricao") descricao: String,
-                @Field("data") data: String,
-                @Field("imagem") imagem: String,
-                @Field("latitude") latitude: Double,
-                @Field("longitude") longitude: Double,
-                @Field("user_id") user_id: Int,
-                @Field("categoria_id") categoria_id: Int): Call<OutputNewReport>
+  fun newReport(
+    @Field("titulo") titulo: String,
+    @Field("descricao") descricao: String,
+    @Field("data") data: String,
+    @Field("imagem") imagem: String,
+    @Field("latitude") latitude: Double,
+    @Field("longitude") longitude: Double,
+    @Field("user_id") user_id: Int,
+    @Field("categoria_id") categoria_id: Int
+  ): Call<OutputNewReport>
 
   @POST("report/delete/{id}")
   fun deleteReport(@Path("id") id: Int): Call<OutputDeleteReport>
+
+  @FormUrlEncoded
+  @POST("report/edit/{id}")
+  fun editReport(
+    @Path("id") id: Int,
+    @Field("titulo") titulo: String,
+    @Field("descricao") descricao: String,
+    @Field("categoria_id") categoria_id: Int
+  ): Call<OutputEditReport>
 }
