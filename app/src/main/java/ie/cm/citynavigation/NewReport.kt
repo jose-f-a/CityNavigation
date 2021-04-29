@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -21,12 +20,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.children
 import com.droidman.ktoasty.KToasty
-import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import ie.cm.citynavigation.api.Endpoints
-import ie.cm.citynavigation.api.OutputLogin
 import ie.cm.citynavigation.api.OutputNewReport
 import ie.cm.citynavigation.api.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_new_report.*
@@ -36,7 +32,6 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.jar.Manifest
 
 class NewReport : AppCompatActivity() {
   private lateinit var newReportTitleView: EditText
@@ -159,14 +154,12 @@ class NewReport : AppCompatActivity() {
     chipGroup = findViewById(R.id.chip_group)
     var id = chipGroup.checkedChipId
 
-    var categoriaId = when (id) {
-      2131361902 -> "1"
-      2131361901 -> "2"
-      2131361900 -> "3"
-      else -> "0"
+    return when (id) {
+      2131361902 -> 1
+      2131361901 -> 2
+      2131361900 -> 3
+      else -> 0
     }
-
-    return categoriaId.toInt()
   }
 
   @RequiresApi(Build.VERSION_CODES.O)

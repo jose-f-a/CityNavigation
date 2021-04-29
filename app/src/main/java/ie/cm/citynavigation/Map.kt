@@ -39,7 +39,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   private lateinit var categoryFilterCG: ChipGroup
   private lateinit var distanceFilterCG: ChipGroup
   private lateinit var markersArray: ArrayList<Marker>
-  private lateinit var markersHash: HashMap<Marker, Int>
+  private lateinit var markersCatHash: HashMap<Marker, Int>
 
   // Mapa
   private lateinit var mMap: GoogleMap
@@ -69,7 +69,6 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       setDisplayShowHomeEnabled(true)
-      setDisplayShowTitleEnabled(true)
       setDisplayShowTitleEnabled(false)
     }
 
@@ -87,6 +86,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
         super.onLocationResult(p0)
         lastLocation = p0.lastLocation
         var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
+        Log.d("****Map", lastLocation.toString())
       }
     }
 
@@ -123,7 +123,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
               MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString())
             )
             markersArray.add(marker)
-            markersHash.put(marker, report.categoria_id)
+            markersCatHash.put(marker, report.categoria_id)
           }
         } else {
           KToasty.warning(this@Map, getString(R.string.error), Toast.LENGTH_SHORT).show()
@@ -168,7 +168,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
     // Initialize Arrays
     markersArray = arrayListOf()
-    markersHash = hashMapOf()
+    markersCatHash = hashMapOf()
 
     // Get WS Markers
     getReports()
@@ -200,12 +200,48 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
         if (categoriaId == 0) {
           marker.isVisible = true
         } else {
-          marker.isVisible = markersHash.get(marker) == categoriaId
+          marker.isVisible = markersCatHash.get(marker) == categoriaId
+        }
+      }
+    }
+
+    distanceFilterCG.setOnCheckedChangeListener { group, checkedId ->
+      Log.d("****Map", checkedId.toString())
+      var filter: Float = when (checkedId) {
+        2131361901 -> 1000f
+        2131361903 -> 2000f
+        2131361905 -> 3000f
+        2131361906 -> 4000f
+        2131361907 -> 5000f
+        2131361908 -> 6000f
+        2131361909 -> 7000f
+        2131361910 -> 8000f
+        2131361911 -> 9000f
+        2131361900 -> 10000f
+        else -> 0f
+      }
+
+      for (marker in markersArray) {
+        if (filter == 0f) {
+          Log.d("****Map", "Entrou if filter == 0")
+          marker.isVisible = true
+        } else {
+          var distance = getDistance(lastLocation.latitude, lastLocation.longitude, marker.position.latitude, marker.position.longitude)
+          marker.isVisible = filter >= distance
         }
       }
     }
   }
 
+  // Calculating distance
+  private fun getDistance(lllat: Double, lllong: Double, mplat: Double, mplong: Double): Float {
+    val result = FloatArray(1)
+
+    Location.distanceBetween(lllat, lllong, mplat, mplong, result)
+    return result[0]
+  }
+
+  // Permission
   private fun isPermissionGranted(): Boolean {
     return ContextCompat.checkSelfPermission(
       this,
@@ -241,6 +277,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     }
   }
 
+  // Location
   private fun startLocationUpdates() {
     if (ActivityCompat.checkSelfPermission(
         this,
@@ -264,11 +301,13 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
   }
 
+  // Stop getting updates
   override fun onPause() {
     super.onPause()
     fusedLocationClient.removeLocationUpdates(locationCallback)
   }
 
+  // Resuming updates
   override fun onResume() {
     super.onResume()
     startLocationUpdates()
