@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.droidman.ktoasty.KToasty
+import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import ie.cm.citynavigation.api.Endpoints
 import ie.cm.citynavigation.api.OutputNewReport
@@ -63,8 +64,12 @@ class NewReport : AppCompatActivity() {
     //Inputs
     newReportTitleView = findViewById(R.id.newReportTitleText)
     newReportTextView = findViewById(R.id.newReportTextText)
-
+    chipGroup = findViewById(R.id.chip_group)
     newReportImage = findViewById(R.id.newReportImage)
+
+    chipGroup.setOnCheckedChangeListener { group, checkedId ->
+      Log.d("****Map", checkedId.toString())
+    }
   }
 
   //Toolbar Menu
@@ -77,7 +82,11 @@ class NewReport : AppCompatActivity() {
   @RequiresApi(Build.VERSION_CODES.O)
   override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
     R.id.miPicture -> {
-      if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+      if (ContextCompat.checkSelfPermission(
+          this,
+          android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+      ) {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(this.packageManager) != null) {
           @Suppress("DEPRECATION")
@@ -85,9 +94,12 @@ class NewReport : AppCompatActivity() {
         } else {
           KToasty.error(this, getString(R.string.cantCamera), Toast.LENGTH_SHORT).show()
         }
-      }
-       else {
-        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), CAMERA_PERMISSION_CODE)
+      } else {
+        ActivityCompat.requestPermissions(
+          this,
+          arrayOf(android.Manifest.permission.CAMERA),
+          CAMERA_PERMISSION_CODE
+        )
       }
 
       true
@@ -127,14 +139,26 @@ class NewReport : AppCompatActivity() {
     val categoria_id = getCategoria()
     val imagem = getImage()
 
+    Log.d("****NewReport", titulo)
+    Log.d("****NewReport", descricao)
+    Log.d("****NewReport", data.toString())
+    Log.d("****NewReport", categoria_id.toString())
+    Log.d("****NewReport", imagem)
+    Log.d("****NewReport", latitude.toString())
+    Log.d("****NewReport", longitude.toString())
+    Log.d("****NewReport", user_id.toString())
+    Log.d("****NewReport", categoria_id.toString())
+
     /* WS */
     val request = ServiceBuilder.buildService(Endpoints::class.java)
-    val call = request.newReport(titulo, descricao, data, imagem, latitude, longitude, user_id, categoria_id)
+    val call =
+      request.newReport(titulo, descricao, data, imagem, latitude, longitude, user_id, categoria_id)
     call.enqueue(object : Callback<OutputNewReport> {
       override fun onResponse(call: Call<OutputNewReport>, response: Response<OutputNewReport>) {
         val r: OutputNewReport = response.body()!!
 
         if (!r.status) {
+          Log.d("****NewReport", r.toString())
           KToasty.error(this@NewReport, getString(R.string.error), Toast.LENGTH_SHORT).show()
         } else {
           KToasty.success(this@NewReport, getString(R.string.reportCreated), Toast.LENGTH_SHORT)
@@ -151,25 +175,22 @@ class NewReport : AppCompatActivity() {
   }
 
   private fun getCategoria(): Int {
-    chipGroup = findViewById(R.id.chip_group)
-    var id = chipGroup.checkedChipId
-
-    return when (id) {
-      2131361902 -> 1
-      2131361901 -> 2
-      2131361900 -> 3
+    val road = findViewById<Chip>(R.id.chipRoad)
+    return when (chipGroup.checkedChipId) {
+      2131361916 -> 1
+      2131361913 -> 2
+      2131361912 -> 3
       else -> 0
     }
   }
 
   @RequiresApi(Build.VERSION_CODES.O)
-  private fun getImage() : String {
+  private fun getImage(): String {
     val image = newReportImage.drawable.toBitmap()
     val byteArrayOutputStream = ByteArrayOutputStream()
     image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-    val encodedImage: String = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray())
 
-    return encodedImage
+    return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray())
   }
 
   companion object {
