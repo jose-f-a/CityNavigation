@@ -15,7 +15,7 @@
     <string name="miLogout">Logout</string>
     <string name="miSave">Save</string>
     <string name="miDelete">Delete</string>
-    <string name="none" />
+    <string name="none">None</string>
 
     <!-- Login -->
     <string name="withoutLogin"><u>Continue without login</u></string>
@@ -66,9 +66,21 @@
 
     <string name="notifications">Notifications</string>
     <string name="title_activity_maps">Map</string>
+    <string name="distance">Distance</string>
 
     <!-- Chips -->
     <string name="road">Road</string>
     <string name="nature">Nature</string>
     <string name="construction">Construction</string>
+    <string name="onekm">1km</string>
+    <string name="twokm">2km</string>
+    <string name="threekm">3km</string>
+    <string name="fourkm">4km</string>
+    <string name="fivekm">5km</string>
+    <string name="sixkm">6km</string>
+    <string name="sevenkm">7km</string>
+    <string name="eightkm">8km</string>
+    <string name="ninekm">9km</string>
+    <string name="tenkm">10km</string>
+
 </resources>

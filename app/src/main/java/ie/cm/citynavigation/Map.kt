@@ -24,6 +24,7 @@ import com.droidman.ktoasty.KToasty
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.chip.ChipGroup
 import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.api.Endpoints
 import ie.cm.citynavigation.api.Report
@@ -35,7 +36,11 @@ import kotlin.collections.Map
 
 class Map : AppCompatActivity(), OnMapReadyCallback {
 
-  //  private lateinit var tempbtn: Button
+  private lateinit var categoryFilterCG: ChipGroup
+  private lateinit var distanceFilterCG: ChipGroup
+  private lateinit var markersArray: ArrayList<Marker>
+  private lateinit var markersHash: HashMap<Marker, Int>
+
   // Mapa
   private lateinit var mMap: GoogleMap
 
@@ -96,13 +101,9 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     isLogged = sharedPref.getBoolean(getString(R.string.logged), false)
     userId = sharedPref.getInt(getString(R.string.userId), 0)
 
-    /*//Butao temporario
-    tempbtn = findViewById(R.id.tempbtn)
-    val reportFragment = ReportFragment()
-
-    tempbtn.setOnClickListener {
-      reportFragment.show(supportFragmentManager, "aaa")
-    }*/
+    // Chipgroup
+    categoryFilterCG = findViewById(R.id.categoryFilterChipGroup)
+    distanceFilterCG = findViewById(R.id.distanceFilterChipGroup)
   }
 
   private fun getReports() {
@@ -118,7 +119,11 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
           for (report in reports) {
             position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
-            mMap.addMarker(MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString()))
+            var marker = mMap.addMarker(
+              MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString())
+            )
+            markersArray.add(marker)
+            markersHash.put(marker, report.categoria_id)
           }
         } else {
           KToasty.warning(this@Map, getString(R.string.error), Toast.LENGTH_SHORT).show()
@@ -133,15 +138,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
   // Long pressing on the map it opens New Report Activity
   private fun setMapLongClick(map: GoogleMap) {
-    // Check if a user is logged in
-    /*val sharedPref: SharedPreferences = getSharedPreferences(
-      getString(R.string.preference_file_key),
-      Context.MODE_PRIVATE
-    )
-    val isLogged = sharedPref.getBoolean(getString(R.string.logged), false)
-    val userId = sharedPref.getInt(getString(R.string.userId), 0)*/
-
-    if(isLogged) {
+    if (isLogged) {
       map.setOnMapLongClickListener { latLng ->
         val lat = latLng.latitude
         val lng = latLng.longitude
@@ -154,7 +151,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
         }
       }
     } else {
-     KToasty.info(this, getString(R.string.loginNeeded), Toast.LENGTH_LONG).show()
+      KToasty.info(this, getString(R.string.loginNeeded), Toast.LENGTH_LONG).show()
     }
   }
 
@@ -169,10 +166,14 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     val homeLatLng = LatLng(41.698871, -8.827075)
     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, 15f))
 
-    //setUpMap()
+    // Initialize Arrays
+    markersArray = arrayListOf()
+    markersHash = hashMapOf()
+
     // Get WS Markers
     getReports()
 
+    // Open Marker's Fragmnet
     mMap.let {
       it.setOnMarkerClickListener {
         val bundle = Bundle()
@@ -185,6 +186,22 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
         reportFragment.show(supportFragmentManager, "aaa")
 
         false
+      }
+    }
+
+    categoryFilterCG.setOnCheckedChangeListener { group, checkedId ->
+      var categoriaId = when (checkedId) {
+        2131361916 -> 1
+        2131361913 -> 2
+        2131361912 -> 3
+        else -> 0
+      }
+      for (marker in markersArray) {
+        if (categoriaId == 0) {
+          marker.isVisible = true
+        } else {
+          marker.isVisible = markersHash.get(marker) == categoriaId
+        }
       }
     }
   }
