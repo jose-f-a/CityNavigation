@@ -12,7 +12,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -21,9 +20,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.widget.Toast
 import com.droidman.ktoasty.KToasty
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.chip.ChipGroup
 import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.api.Endpoints
@@ -119,11 +116,20 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
           for (report in reports) {
             position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
-            var marker = mMap.addMarker(
-              MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString())
-            )
-            markersArray.add(marker)
-            markersCatHash.put(marker, report.categoria_id)
+            if (report.user_id == userId) {
+              var marker = mMap.addMarker(
+                MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString()).icon(
+                  BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+              )
+              markersArray.add(marker)
+              markersCatHash.put(marker, report.categoria_id)
+            } else {
+              var marker = mMap.addMarker(
+                MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString())
+              )
+              markersArray.add(marker)
+              markersCatHash.put(marker, report.categoria_id)
+            }
           }
         } else {
           KToasty.warning(this@Map, getString(R.string.error), Toast.LENGTH_SHORT).show()
