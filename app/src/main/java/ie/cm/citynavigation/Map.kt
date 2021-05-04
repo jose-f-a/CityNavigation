@@ -1,35 +1,36 @@
 package ie.cm.citynavigation
 
-import android.content.pm.PackageManager
-import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.location.Location
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.droidman.ktoasty.KToasty
+import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.chip.ChipGroup
-import ie.cm.citynavigation.adapter.NoteCardAdapter
 import ie.cm.citynavigation.api.Endpoints
 import ie.cm.citynavigation.api.Report
 import ie.cm.citynavigation.api.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.collections.Map
+
 
 class Map : AppCompatActivity(), OnMapReadyCallback {
 
@@ -40,6 +41,10 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
   // Mapa
   private lateinit var mMap: GoogleMap
+  private lateinit var geofenceClient: GeofencingClient
+  private lateinit var geofenceHelper: GeofenceHelper
+  var geofenceRadius = 200
+  var GEOFENCE_ID = "GEOFENCEID"
 
   // Last known location implementation
   private lateinit var lastLocation: Location
@@ -51,6 +56,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
   // Permission
   private val REQUEST_LOCATION_PERMISSION = 1
+  private val BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 10002
 
   private lateinit var reports: List<Report>
 
@@ -83,7 +89,6 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
         super.onLocationResult(p0)
         lastLocation = p0.lastLocation
         var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
-        Log.d("****Map", lastLocation.toString())
       }
     }
 
@@ -97,10 +102,14 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     )
     isLogged = sharedPref.getBoolean(getString(R.string.logged), false)
     userId = sharedPref.getInt(getString(R.string.userId), 0)
+    geofenceRadius = sharedPref.getInt(getString(R.string.geofenceRadius), 200)
 
     // Chipgroup
     categoryFilterCG = findViewById(R.id.categoryFilterChipGroup)
     distanceFilterCG = findViewById(R.id.distanceFilterChipGroup)
+
+    geofenceClient = LocationServices.getGeofencingClient(this)
+    geofenceHelper = GeofenceHelper(this)
   }
 
   private fun getReports() {
@@ -118,14 +127,17 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
             position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
             if (report.user_id == userId) {
               var marker = mMap.addMarker(
-                MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString()).icon(
-                  BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                MarkerOptions().position(position).title(report.titulo)
+                  .snippet(report.id.toString()).icon(
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
+                  )
               )
               markersArray.add(marker)
               markersCatHash.put(marker, report.categoria_id)
             } else {
               var marker = mMap.addMarker(
-                MarkerOptions().position(position).title(report.titulo).snippet(report.id.toString())
+                MarkerOptions().position(position).title(report.titulo)
+                  .snippet(report.id.toString())
               )
               markersArray.add(marker)
               markersCatHash.put(marker, report.categoria_id)
@@ -161,12 +173,53 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     }
   }
 
+  @RequiresApi(Build.VERSION_CODES.M)
+  private fun addCircle(latlng: LatLng, radius: Double) {
+    var circle = CircleOptions()
+    circle.center(latlng)
+    circle.radius(radius)
+    circle.strokeColor(getColor(R.color.main))
+    circle.fillColor(getColor(R.color.secondaryFaded))
+    circle.strokeWidth(1.0f)
+    mMap.addCircle(circle)
+  }
+
+  @SuppressLint("MissingPermission")
+  private fun addGeofence(latLng: LatLng, radius: Double) {
+    val geofence = geofenceHelper.getGeofence(
+      GEOFENCE_ID,
+      latLng,
+      radius,
+      Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL or Geofence.GEOFENCE_TRANSITION_EXIT
+    )
+
+    val geofencingRequest = geofenceHelper.getGeofencingRequest(geofence)
+    val pendingIntent = geofenceHelper.getPendingIntent()
+
+    geofenceClient.addGeofences(geofencingRequest, pendingIntent)
+      .addOnSuccessListener {
+        Log.d("****Geofence", "onSuccess: Geofence Added...")
+      }
+      .addOnFailureListener { e ->
+        val errorMessage = geofenceHelper.getErrorString(e)
+        Log.d("****Geofence", "onFailure: $e")
+      }
+  }
+
+  @RequiresApi(Build.VERSION_CODES.M)
+  private fun handleMapClick(latLng: LatLng) {
+    addGeofence(latLng, geofenceRadius.toDouble())
+    addCircle(latLng, geofenceRadius.toDouble())
+  }
+
+  @RequiresApi(Build.VERSION_CODES.M)
   override fun onMapReady(googleMap: GoogleMap) {
     mMap = googleMap
     setMapStyle(mMap)
     enableMyLocation()
     setMapLongClick(mMap)
     mMap.uiSettings.isMyLocationButtonEnabled = false
+    mMap.uiSettings.isCompassEnabled = false
 
     // Map home coordinates
     val homeLatLng = LatLng(41.698871, -8.827075)
@@ -195,6 +248,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
       }
     }
 
+    // Category Filter
     categoryFilterCG.setOnCheckedChangeListener { group, checkedId ->
       var categoriaId = when (checkedId) {
         2131361916 -> 1
@@ -211,8 +265,8 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
       }
     }
 
+    // Distance Filter
     distanceFilterCG.setOnCheckedChangeListener { group, checkedId ->
-      Log.d("****Map", checkedId.toString())
       var filter: Float = when (checkedId) {
         2131361901 -> 1000f
         2131361903 -> 2000f
@@ -229,12 +283,51 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
 
       for (marker in markersArray) {
         if (filter == 0f) {
-          Log.d("****Map", "Entrou if filter == 0")
           marker.isVisible = true
         } else {
-          var distance = getDistance(lastLocation.latitude, lastLocation.longitude, marker.position.latitude, marker.position.longitude)
+          var distance = getDistance(
+            lastLocation.latitude,
+            lastLocation.longitude,
+            marker.position.latitude,
+            marker.position.longitude
+          )
           marker.isVisible = filter >= distance
         }
+      }
+    }
+
+    // On Map Click adds Geofence
+    mMap.setOnMapClickListener { latLng ->
+      if (Build.VERSION.SDK_INT >= 29) {
+        //We need background permission
+        if (ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+          ) == PackageManager.PERMISSION_GRANTED
+        ) {
+          handleMapClick(latLng)
+        } else {
+          if (ActivityCompat.shouldShowRequestPermissionRationale(
+              this,
+              Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+          ) {
+            //We show a dialog and ask for permission
+            ActivityCompat.requestPermissions(
+              this,
+              arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+              BACKGROUND_LOCATION_ACCESS_REQUEST_CODE
+            )
+          } else {
+            ActivityCompat.requestPermissions(
+              this,
+              arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+              BACKGROUND_LOCATION_ACCESS_REQUEST_CODE
+            )
+          }
+        }
+      } else {
+        handleMapClick(latLng)
       }
     }
   }

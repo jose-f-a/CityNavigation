@@ -7,6 +7,7 @@
     <string name="userEmail">email</string>
     <string name="userName" />
     <string name="userId">id</string>
+    <string name="geofenceRadius">id</string>
 
     <!-- Menu Items -->
     <string name="miHome">Map</string>
@@ -64,9 +65,19 @@
     <string name="lorem">Lorem Ipsum</string>
     <string name="loremMail">lorem@ipsum.com</string>
 
+    <!-- Settings -->
     <string name="notifications">Notifications</string>
+    <string name="geofenceradius">Geofence Radius:</string>
+    <string name="Done">Done</string>
+
     <string name="title_activity_maps">Map</string>
     <string name="distance">Distance</string>
+
+    <!-- Notification -->
+    <string name="geofence">Geofence</string>
+    <string name="geofenceEnter">Geofence area entered</string>
+    <string name="geofenceExit">Geofence area exited</string>
+    <string name="geofenceDwell">Still inside geofence area</string>
 
     <!-- Chips -->
     <string name="road">Road</string>

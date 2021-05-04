@@ -2,6 +2,8 @@
 <resources>
     <color name="main">#0EAD2E</color>
     <color name="secondary">#348A62</color>
+    <color name="mainFaded">#0EAD2E</color>
+    <color name="secondaryFaded">#25348A62</color>
     <color name="grey1">#3F5247</color>
     <color name="grey2">#454541</color>
     <color name="black_ish">#0E191A</color>
