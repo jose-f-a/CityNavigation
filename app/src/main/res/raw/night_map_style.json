@@ -24,15 +24,6 @@
     ]
   },
   {
-    "featureType": "administrative.land_parcel",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
     "featureType": "administrative.locality",
     "elementType": "labels.text.fill",
     "stylers": [
@@ -136,15 +127,6 @@
     "stylers": [
       {
         "color": "#f3d19c"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
       }
     ]
   },

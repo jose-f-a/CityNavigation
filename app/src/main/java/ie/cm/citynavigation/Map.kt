@@ -7,10 +7,15 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.hardware.Sensor
+import android.hardware.SensorEventListener
+import android.hardware.SensorEvent
+import android.hardware.SensorManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -30,14 +35,13 @@ import ie.cm.citynavigation.api.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.abs
 
-
-class Map : AppCompatActivity(), OnMapReadyCallback {
-
+class Map : AppCompatActivity(), OnMapReadyCallback, SensorEventListener {
+  // Inputs
   private lateinit var categoryFilterCG: ChipGroup
   private lateinit var distanceFilterCG: ChipGroup
-  private lateinit var markersArray: ArrayList<Marker>
-  private lateinit var markersCatHash: HashMap<Marker, Int>
+  private lateinit var speedTV: TextView
 
   // Mapa
   private lateinit var mMap: GoogleMap
@@ -45,6 +49,12 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   private lateinit var geofenceHelper: GeofenceHelper
   var geofenceRadius = 200
   var GEOFENCE_ID = "GEOFENCEID"
+
+  // Sensors
+  private lateinit var sensorManager: SensorManager
+  private var light: Sensor? = null
+  private var accelerometer: Sensor? = null
+  private var brightness: Float = 0F
 
   // Last known location implementation
   private lateinit var lastLocation: Location
@@ -58,8 +68,12 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   private val REQUEST_LOCATION_PERMISSION = 1
   private val BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 10002
 
+  // Dados
   private lateinit var reports: List<Report>
+  private lateinit var markersArray: ArrayList<Marker>
+  private lateinit var markersCatHash: HashMap<Marker, Int>
 
+  // Shared Preferences
   private var isLogged: Boolean = false
   private var userId: Int = 0
 
@@ -107,9 +121,16 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     // Chipgroup
     categoryFilterCG = findViewById(R.id.categoryFilterChipGroup)
     distanceFilterCG = findViewById(R.id.distanceFilterChipGroup)
+    speedTV = findViewById(R.id.speed)
 
+    // Geofence
     geofenceClient = LocationServices.getGeofencingClient(this)
     geofenceHelper = GeofenceHelper(this)
+
+    // Sensors
+    sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    light = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+    accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
   }
 
   private fun getReports() {
@@ -404,6 +425,7 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
   override fun onPause() {
     super.onPause()
     fusedLocationClient.removeLocationUpdates(locationCallback)
+    sensorManager.unregisterListener(this)
   }
 
   // Resuming updates
@@ -411,26 +433,62 @@ class Map : AppCompatActivity(), OnMapReadyCallback {
     super.onResume()
     startLocationUpdates()
     getReports()
+    sensorManager.registerListener(this, light, SensorManager.SENSOR_DELAY_NORMAL)
+    sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
   }
 
   companion object {
     private const val LOCATION_PERMISSION_REQUEST_CODE = 1
   }
 
+  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    return
+  }
+
+  override fun onSensorChanged(event: SensorEvent) {
+    if (event.sensor?.type == Sensor.TYPE_LIGHT) {
+      brightness = event.values[0]
+    }
+    if (event.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
+      var speed1 = event.values[0]
+      var speed2 = event.values[1]
+      var speed3 = event.values[2]
+
+      var speed = abs(speed1) * abs(speed2) * abs(speed3)
+
+      if (speed  < 2 ) {
+        speedTV.setText("0")
+      } else {
+        speedTV.setText(speed.toString())
+      }
+    }
+  }
+
   // Allows map styling and theming to be customized.
   private fun setMapStyle(map: GoogleMap) {
     try {
-      // Customize the styling of the base map using a JSON object defined
-      // in a raw resource file.
-      val success = map.setMapStyle(
-        MapStyleOptions.loadRawResourceStyle(
-          this,
-          R.raw.night_map_style
+      if (brightness > 100) {
+        val success = map.setMapStyle(
+          MapStyleOptions.loadRawResourceStyle(
+            this,
+            R.raw.light_map_style
+          )
         )
-      )
 
-      if (!success) {
-        Log.e("****MapStyle", "Style parsing failed.")
+        if (!success) {
+          Log.e("****MapStyle", "Style parsing failed.")
+        }
+      } else {
+        val success = map.setMapStyle(
+          MapStyleOptions.loadRawResourceStyle(
+            this,
+            R.raw.night_map_style
+          )
+        )
+
+        if (!success) {
+          Log.e("****MapStyle", "Style parsing failed.")
+        }
       }
     } catch (e: Resources.NotFoundException) {
       Log.e("****MapStyle", "Can't find style. Error: ", e)
