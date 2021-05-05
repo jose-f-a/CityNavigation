@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Map">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/homeToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/Theme.CityNavigation.CustomToolbar"
+        android:background="@color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/miHome"
+        android:translationZ="1dp"/>
+
+    <fragment
+        android:id="@+id/mapp"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/homeToolbar"
+        tools:context=".MapsActivity" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_marginTop="32dp"
+        android:background="#80000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/categorytv" />
+
+    <TextView
+        android:id="@+id/categorytv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/hsvCategoryFilter"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/category"
+        android:textAppearance="@style/lButtons"/>
+
+    <HorizontalScrollView
+        android:id="@+id/hsvCategoryFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/distancetv"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/categoryFilterChipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNone1"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/none"
+                android:textAppearance="@style/chip" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRoad"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/road"
+                android:textAppearance="@style/chip" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNature"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nature"
+                android:textAppearance="@style/chip" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipConstruction"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/construction"
+                android:textAppearance="@style/chip" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/distancetv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/hsvDistanceFilter"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/distance"
+        android:textAppearance="@style/lButtons"/>
+
+    <HorizontalScrollView
+        android:id="@+id/hsvDistanceFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/distanceFilterChipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNone2"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/none"
+                android:textAppearance="@style/chip"
+                android:checked="true"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip1km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onekm"
+                android:textAppearance="@style/chip"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip2km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/twokm"
+                android:textAppearance="@style/chip" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip3km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/threekm"
+                android:textAppearance="@style/chip" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip4km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fourkm"
+                android:textAppearance="@style/chip" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip5km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fivekm"
+                android:textAppearance="@style/chip" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip6km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sixkm"
+                android:textAppearance="@style/chip" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip7km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sevenkm"
+                android:textAppearance="@style/chip" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip8km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/eightkm"
+                android:textAppearance="@style/chip" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip9km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ninekm"
+                android:textAppearance="@style/chip" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip10km"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tenkm"
+                android:textAppearance="@style/chip" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:text=""
+        android:textAppearance="@style/noteText"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

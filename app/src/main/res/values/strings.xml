@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">City Navigation</string>
+    <string name="app_name" translatable="false">City Navigation</string>
 
     <!-- Shared preferences -->
-    <string name="preference_file_key">cn-sp</string>
-    <string name="logged">logged</string>
-    <string name="userEmail">email</string>
-    <string name="userName" />
-    <string name="userId">id</string>
-    <string name="geofenceRadius">id</string>
+    <string name="preference_file_key" translatable="false">cn-sp</string>
+    <string name="logged" translatable="false">logged</string>
+    <string name="userEmail" translatable="false">email</string>
+    <string name="userName" translatable="false" />
+    <string name="userId" translatable="false">id</string>
+    <string name="geofenceRadius" translatable="false">id</string>
 
     <!-- Menu Items -->
     <string name="miHome">Map</string>
@@ -16,12 +16,12 @@
     <string name="miLogout">Logout</string>
     <string name="miSave">Save</string>
     <string name="miDelete">Delete</string>
-    <string name="none">None</string>
+    <string name="none" translatable="false">None</string>
 
     <!-- Login -->
     <string name="withoutLogin"><u>Continue without login</u></string>
     <string name="loginFailed">Login failed</string>
-    <string name="email">Email</string>
+    <string name="email" translatable="false">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
 
@@ -42,8 +42,8 @@
     <string name="cantCamera">Cant open camera</string>
 
     <!-- Dialog -->
-    <string name="open">Drawer Opened</string>
-    <string name="close">Drawer Closed</string>
+    <string name="open" translatable="false">Drawer Opened</string>
+    <string name="close" translatable="false">Drawer Closed</string>
 
     <!-- Notes/Reports -->
     <string name="title">Title</string>
@@ -62,8 +62,8 @@
     <string name="deleteReport">Delete Report</string>
 
     <!-- Placeholder -->
-    <string name="lorem">Lorem Ipsum</string>
-    <string name="loremMail">lorem@ipsum.com</string>
+    <string name="lorem" translatable="false">Lorem Ipsum</string>
+    <string name="loremMail" translatable="false">lorem@ipsum.com</string>
 
     <!-- Settings -->
     <string name="notifications">Notifications</string>
@@ -74,7 +74,7 @@
     <string name="distance">Distance</string>
 
     <!-- Notification -->
-    <string name="geofence">Geofence</string>
+    <string name="geofence" translatable="false">Geofence</string>
     <string name="geofenceEnter">Geofence area entered</string>
     <string name="geofenceExit">Geofence area exited</string>
     <string name="geofenceDwell">Still inside geofence area</string>
@@ -83,15 +83,15 @@
     <string name="road">Road</string>
     <string name="nature">Nature</string>
     <string name="construction">Construction</string>
-    <string name="onekm">1km</string>
-    <string name="twokm">2km</string>
-    <string name="threekm">3km</string>
-    <string name="fourkm">4km</string>
-    <string name="fivekm">5km</string>
-    <string name="sixkm">6km</string>
-    <string name="sevenkm">7km</string>
-    <string name="eightkm">8km</string>
-    <string name="ninekm">9km</string>
-    <string name="tenkm">10km</string>
+    <string name="onekm" translatable="false">1km</string>
+    <string name="twokm" translatable="false">2km</string>
+    <string name="threekm" translatable="false">3km</string>
+    <string name="fourkm" translatable="false">4km</string>
+    <string name="fivekm" translatable="false">5km</string>
+    <string name="sixkm" translatable="false">6km</string>
+    <string name="sevenkm" translatable="false">7km</string>
+    <string name="eightkm" translatable="false">8km</string>
+    <string name="ninekm" translatable="false">9km</string>
+    <string name="tenkm" translatable="false">10km</string>
 
 </resources>

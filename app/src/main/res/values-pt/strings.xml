@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="miHome">Mapa</string>
+    <string name="miNotes">Notas</string>
+    <string name="miSettings">Definições</string>
+    <string name="miLogout">Sair</string>
+    <string name="miSave">Guardar</string>
+    <string name="miDelete">Apagar</string>
+    <string name="withoutLogin"><u>Continuar  sem login</u></string>
+    <string name="loginFailed">Login falhou</string>
+    <string name="password">Palavra-passe</string>
+    <string name="login">Entrar</string>
+    <string name="welcome">Bem-vindo</string>
+    <string name="stranger">Estranho</string>
+    <string name="emptyFields">Por favor, preencha os campos</string>
+    <string name="loginNeeded">Faça login para criar ocorrência</string>
+    <string name="error">Algo ocorreu mal, tente de novo</string>
+    <string name="noteNotCreated">Nota não foi criada</string>
+    <string name="noteNotUpdated">Nota não foi atualizada</string>
+    <string name="reportCreated">Ocorrência criada</string>
+    <string name="reportUpdated">Ocorrência atualizada</string>
+    <string name="reportDeleted">Ocorrência apagado</string>
+    <string name="cantCamera">Não foi possível abrir a câmara</string>
+    <string name="title">Título</string>
+    <string name="insertText">Insira o texto</string>
+    <string name="addPhoto">Adicionar foto</string>
+    <string name="cancel">Cancelar</string>
+    <string name="newNote">Nova nota</string>
+    <string name="editNote">Editar nota</string>
+    <string name="addNote">Adicionar nota</string>
+    <string name="category">Categoria</string>
+    <string name="newReport">Nova ocorrência</string>
+    <string name="editReport">Editar ocorrência</string>
+    <string name="deleteReport">Apagar ocorrência</string>
+    <string name="notifications">Notificacões</string>
+    <string name="geofenceradius">Raio Geofence:</string>
+    <string name="Done">Feito</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="distance">Distância</string>
+    <string name="geofenceEnter">Enrou na área de Geofence</string>
+    <string name="geofenceExit">Saíu da área Geofence</string>
+    <string name="geofenceDwell">Ainda na área Geofence</string>
+    <string name="road">Estrada</string>
+    <string name="nature">Natureza</string>
+    <string name="construction">Construção</string>
+</resources>
